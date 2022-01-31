@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.text import slugify
+from slugify import slugify
 from django.contrib.auth.models import User
 
 
@@ -9,6 +9,9 @@ class BaseModel(models.Model):
         unique=True,
         blank=False
     )
+
+    class Meta:
+        abstract = True
 
 
 class Seller(models.Model):
@@ -27,17 +30,14 @@ class Seller(models.Model):
         verbose_name_plural = "Продавцы"
 
 
-class Category(models.Model):
-    title = models.CharField(
-        max_length=255,
-        unique=True,
-        blank=False
-    )
+class Category(BaseModel):
+
     slug = models.SlugField(
         max_length=255,
         unique=True,
         blank=True,
-        null=True
+        null=True,
+        allow_unicode=True
     )
 
     @property
@@ -48,35 +48,28 @@ class Category(models.Model):
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
 
+
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
-class Tag(models.Model):
-    title = models.CharField(
-        max_length=255,
-        unique=True,
-        blank=False
-    )
+class Tag(BaseModel):
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name = "Тэг"
         verbose_name_plural = "Тэги"
 
 
-class Ads(models.Model):
-    title = models.CharField(
-        max_length=255,
-        blank=False
-    )
+class Ad(BaseModel):
+
     description = models.TextField(null=True)
     category = models.ForeignKey(
         'Category',
@@ -94,6 +87,7 @@ class Ads(models.Model):
         blank=True,
         null=True
     )
+    archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(
         auto_now_add=True,
         blank=True,
@@ -107,9 +101,20 @@ class Ads(models.Model):
 
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name = "Объявление"
         verbose_name_plural = "Объявления"
 
+
+class ArchiveAdManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(archived=True)
+
+
+class ArchiveAd(Ad):
+    objects = ArchiveAdManager()
+
+    class Meta:
+        proxy = True
