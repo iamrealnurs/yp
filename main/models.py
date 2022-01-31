@@ -80,6 +80,11 @@ class Ads(models.Model):
         related_name='ads'
     )
     tags = models.ManyToManyField('Tag', blank=True)
+    price = models.PositiveIntegerField(
+        default=0,
+        blank=True,
+        null=True
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
         blank=True,
