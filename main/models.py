@@ -2,6 +2,15 @@ from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 
+
+class BaseModel(models.Model):
+    name = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=False
+    )
+
+
 class Seller(models.Model):
     user = models.OneToOneField(
         User,
