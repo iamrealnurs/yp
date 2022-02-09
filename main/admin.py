@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Seller, Category, Tag, Ads
+from .models import Seller, Category, Tag, Ad
 
 
 class SellerAdmin(admin.ModelAdmin):
@@ -7,18 +7,18 @@ class SellerAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'ads_amount',)
+    list_display = ('name', 'slug', 'ads_amount',)
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+    list_display = ('name',)
 
 
-class AdsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'category', 'seller', 'created_at', 'updated_at',)
+class AdAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'category', 'seller', 'created_at', 'updated_at',)
 
 
 admin.site.register(Seller, SellerAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
-admin.site.register(Ads, AdsAdmin)
+admin.site.register(Ad, AdAdmin)

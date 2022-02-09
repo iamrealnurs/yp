@@ -19,7 +19,7 @@ class Seller(models.Model):
 
 
 class Category(models.Model):
-    title = models.CharField(
+    name = models.CharField(
         max_length=255,
         unique=True,
         blank=False
@@ -41,32 +41,33 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 class Tag(models.Model):
-    title = models.CharField(
+    name = models.CharField(
         max_length=255,
         unique=True,
         blank=False
     )
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name = "Тэг"
         verbose_name_plural = "Тэги"
 
 
-class Ads(models.Model):
-    title = models.CharField(
+class Ad(models.Model):
+    name = models.CharField(
         max_length=255,
-        blank=False
+        blank=False,
+        null=False
     )
     description = models.TextField(null=True)
     category = models.ForeignKey(
@@ -79,7 +80,7 @@ class Ads(models.Model):
         on_delete=models.CASCADE,
         related_name='ads'
     )
-    tags = models.ManyToManyField('Tag', blank=True)
+    tags = models.ManyToManyField('Tag')
     created_at = models.DateTimeField(
         auto_now_add=True,
         blank=True,
@@ -93,7 +94,7 @@ class Ads(models.Model):
 
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name = "Объявление"
