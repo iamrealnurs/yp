@@ -13,6 +13,9 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.name
+
 
 class Seller(models.Model):
     user = models.OneToOneField(
@@ -54,14 +57,8 @@ class Category(BaseModel):
             self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
 
-    def __str__(self):
-        return self.name
-
 
 class Tag(BaseModel):
-
-    def __str__(self):
-        return self.name
 
     class Meta:
         verbose_name = "Тэг"
@@ -99,10 +96,6 @@ class Ad(BaseModel):
         null=True
     )
 
-
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = "Объявление"
         verbose_name_plural = "Объявления"
@@ -118,3 +111,5 @@ class ArchiveAd(Ad):
 
     class Meta:
         proxy = True
+
+
