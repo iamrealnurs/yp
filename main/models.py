@@ -34,6 +34,11 @@ class Seller(models.Model):
 
 
 class Category(BaseModel):
+    name = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=False
+    )
 
     slug = models.SlugField(
         max_length=255,
@@ -59,6 +64,14 @@ class Category(BaseModel):
 
 
 class Tag(BaseModel):
+    name = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=False
+    )
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = "Тэг"
@@ -66,7 +79,11 @@ class Tag(BaseModel):
 
 
 class Ad(BaseModel):
-
+    name = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
     description = models.TextField(null=True)
     category = models.ForeignKey(
         'Category',
