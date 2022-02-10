@@ -1,6 +1,21 @@
 from django.db import models
-from django.utils.text import slugify
+from slugify import slugify
 from django.contrib.auth.models import User
+
+
+class BaseModel(models.Model):
+    name = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=False
+    )
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
 
 class Seller(models.Model):
     user = models.OneToOneField(
@@ -18,17 +33,19 @@ class Seller(models.Model):
         verbose_name_plural = "Продавцы"
 
 
-class Category(models.Model):
+class Category(BaseModel):
     name = models.CharField(
         max_length=255,
         unique=True,
         blank=False
     )
+
     slug = models.SlugField(
         max_length=255,
         unique=True,
         blank=True,
-        null=True
+        null=True,
+        allow_unicode=True
     )
 
     @property
@@ -39,16 +56,14 @@ class Category(models.Model):
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
 
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
 
-    def __str__(self):
-        return self.name
 
-
-class Tag(models.Model):
+class Tag(BaseModel):
     name = models.CharField(
         max_length=255,
         unique=True,
@@ -63,7 +78,7 @@ class Tag(models.Model):
         verbose_name_plural = "Тэги"
 
 
-class Ad(models.Model):
+class Ad(BaseModel):
     name = models.CharField(
         max_length=255,
         blank=False,
@@ -80,7 +95,13 @@ class Ad(models.Model):
         on_delete=models.CASCADE,
         related_name='ads'
     )
-    tags = models.ManyToManyField('Tag')
+    tags = models.ManyToManyField('Tag', blank=True)
+    price = models.PositiveIntegerField(
+        default=0,
+        blank=True,
+        null=True
+    )
+    archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(
         auto_now_add=True,
         blank=True,
@@ -92,11 +113,20 @@ class Ad(models.Model):
         null=True
     )
 
-
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = "Объявление"
         verbose_name_plural = "Объявления"
+
+
+class ArchiveAdManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(archived=True)
+
+
+class ArchiveAd(Ad):
+    objects = ArchiveAdManager()
+
+    class Meta:
+        proxy = True
+
 
