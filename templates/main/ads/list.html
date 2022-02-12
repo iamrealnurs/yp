@@ -1,5 +1,5 @@
 {% extends 'main/base.html' %}
-{% block title %} This page Title{% endblock %}
+{% block title %} List of Ads {% endblock %}
 {% block content %}
 
 <h1>Ads</h1>
@@ -18,7 +18,9 @@
         {% for ad in object_list %}
             <tr>
               <th scope="row">{{ ad.id }}</th>
-              <td>{{ ad.name }}</td>
+              <td>
+                  <a href="{{ ad.get_absolute_url }}">{{ ad.name }}</a>
+              </td>
               <td>{{ ad.category.name }}</td>
               <td>{{ ad.seller.user.username }}</td>
               <td>{{ ad.price }}</td>

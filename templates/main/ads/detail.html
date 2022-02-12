@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% block title %}dsaasd{% endblock %}
+{% block content %}
+
+<h1><a href="{% url 'ads-list' %}">Ads</a></h1>
+
+<ul class="list-group">
+  <li class="list-group-item list-group-item-primary">
+      {{ object.name }}
+  </li>
+  <li class="list-group-item list-group-item-secondary">
+      {{ object.description }}
+  </li>
+  <li class="list-group-item list-group-item-success">
+      {{ object.category }}
+  </li>
+  <li class="list-group-item list-group-item-danger">
+      {{ object.seller.user.username }}
+  </li>
+  <li class="list-group-item list-group-item-warning">
+        {% for tag in object.tags.all %}
+            <span class="badge bg-primary">{{ tag.name }}</span>
+        {% endfor %}
+  </li>
+  <li class="list-group-item list-group-item-info">
+      $ {{ object.price }}
+  </li>
+  <li class="list-group-item list-group-item-dark">
+      {{ object.created_at }}
+  </li>
+</ul>
+
+{% endblock %}
+
+

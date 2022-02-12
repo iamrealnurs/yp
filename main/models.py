@@ -1,6 +1,8 @@
 from django.db import models
-from slugify import slugify
+from django.urls import reverse
 from django.contrib.auth.models import User
+
+from slugify import slugify
 
 
 class BaseModel(models.Model):
@@ -121,6 +123,9 @@ class Ad(BaseModel):
     class Meta:
         verbose_name = "Объявление"
         verbose_name_plural = "Объявления"
+
+    def get_absolute_url(self):
+        return reverse('ads-detail', kwargs={'pk': self.pk})
 
 
 class ArchiveAdManager(models.Manager):

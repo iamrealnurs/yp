@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from .models import Seller, Category, Tag, Ad
 from django.shortcuts import render
 from pprint import pprint
@@ -20,3 +20,8 @@ class AdsListView(ListView):
     model = Ad
     queryset = Ad.objects.all()
     template_name = 'main/ads/list.html'
+
+class AdsDetailView(DetailView):
+    model = Ad
+    template_name = 'main/ads/detail.html'
+
