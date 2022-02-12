@@ -3,34 +3,52 @@
 {% block content %}
 
 <h1>Ads</h1>
-<div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Category</th>
-          <th scope="col">Seller</th>
-          <th scope="col">Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for ad in object_list %}
-            <tr>
-              <th scope="row">{{ ad.id }}</th>
-              <td>
-                  <a href="{{ ad.get_absolute_url }}">{{ ad.name }}</a>
-              </td>
-              <td>{{ ad.category.name }}</td>
-              <td>{{ ad.seller.user.username }}</td>
-              <td>{{ ad.price }}</td>
-            </tr>
-        {% empty %}
-            <li>No ads yet.</li>
-        {% endfor %}
+<div class="row">
+    <div class="col-10">
+        <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Seller</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Tags</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ad in object_list %}
+                    <tr>
+                      <th scope="row">{{ ad.id }}</th>
+                      <td>
+                          <a href="{{ ad.get_absolute_url }}">{{ ad.name }}</a>
+                      </td>
+                      <td>{{ ad.description }}</td>
+                      <td>{{ ad.category.name }}</td>
+                      <td>{{ ad.seller.user.username }}</td>
+                      <td>{{ ad.price }}</td>
+                      <td>
+                         {% for tag in ad.tags.all %}
+                           <span class="badge bg-primary">{{ tag.name }}</span>
+                         {% endfor %}
+                      </td>
+                    </tr>
+                {% empty %}
+                    <li>No ads yet.</li>
+                {% endfor %}
 
-      </tbody>
-    </table>
+              </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-2">
+        <h4>Tags</h4>
+        {% for tag in all_tags_list %}
+           <span class="badge bg-success">{{ tag.name }}</span>
+        {% endfor %}
+    </div>
   </div>
 {% endblock %}
 

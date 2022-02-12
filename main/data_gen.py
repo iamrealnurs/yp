@@ -18,9 +18,9 @@ def seller_gen():
         Seller.objects.create(user=user)
 
 def tag_gen():
-    list_of_tags = ['скидка', 'доставка', 'бесплатно', 'эко', 'первый', 'халяль', 'кошерно']
-    for i in list_of_tags:
-        Tag.objects.create(name=i)
+    # list_of_tags = ['скидка', 'доставка', 'бесплатно', 'эко', 'первый', 'халяль', 'кошерно']
+    for i in range(1, 40):
+        Tag.objects.create(name=''.join(random.choices(string.ascii_lowercase, k=6)))
 
 def category_gen():
     list_of_categories = ['Авто', 'Еда', 'Игрушки', 'Собутыльники']
@@ -30,7 +30,7 @@ def category_gen():
 def ad_gen():
     for x in Seller.objects.all():
         for y in Category.objects.all():
-            for z in range(1,5):
+            for z in range(1,10):
                 desc = ''.join(random.choices(string.ascii_lowercase, k=35))
                 tags = random.sample(list(Tag.objects.all()), 4)
 

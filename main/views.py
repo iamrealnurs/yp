@@ -18,8 +18,32 @@ class IndexView(TemplateView):
 
 class AdsListView(ListView):
     model = Ad
-    queryset = Ad.objects.all()
     template_name = 'main/ads/list.html'
+
+    # def get_queryset(self):
+    #     # tag = self.kwargs.get("category")
+    #     if category:
+    #         queryset = Product.objects.filter(category__iexact=category)
+    #     else:
+    #         queryset = Product.objects.all()
+    #     return queryset
+
+    def get_queryset(self):
+        q = self.request.GET.get('tag', '')
+        if q:
+            query_tag = Tag.objects.filter(name=q).first()
+            queryset = Ad.objects.filter(tags__in=[query_tag])
+        else:
+            queryset = Ad.objects.all()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(AdsListView, self).get_context_data(**kwargs)
+        context['all_tags_list'] = list(Tag.objects.all())
+        return context
+
+
+    
 
 class AdsDetailView(DetailView):
     model = Ad
