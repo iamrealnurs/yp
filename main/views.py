@@ -19,8 +19,11 @@ class IndexView(TemplateView):
 class AdsListView(ListView):
     model = Ad
     template_name = 'main/ads/list.html'
+    paginate_by = 5
 
     def get_queryset(self):
+        print('-------------------')
+        print(self.request.GET)
         tag = self.request.GET.get('tag', '')
         if tag:
             query_tag = Tag.objects.get(name=tag)
@@ -31,6 +34,10 @@ class AdsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(AdsListView, self).get_context_data(**kwargs)
+        tag = self.request.GET.get('tag', '')
+        if tag:
+            query_tag = Tag.objects.get(name=tag)
+            context['query_tag'] = query_tag
         context['all_tags_list'] = list(Tag.objects.all())
         return context
 
