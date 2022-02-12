@@ -20,7 +20,7 @@ INSTALLED_APPS = [
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
-    'MAINTENANCE_MODE': (False, 'Поставить False при технических работах и True при обычном состоянии'),
+    'MAINTENANCE_MODE': (False, 'Поставить False при обычном состоянии и True при технических работах'),
 }
 
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = False

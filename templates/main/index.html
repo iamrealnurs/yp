@@ -1,8 +1,19 @@
 {% extends 'main/base.html' %}
 {% block content %}
 
-<h1>
-    {{ greetings }}
-</h1>
+
+    {% if turn_on_block %}
+        <div>
+            <h1>
+                {{ greetings }}
+            </h1>
+        </div>
+    {% else %}
+        <div>
+            <h1>
+                На сайте проводятся технические работы
+            </h1>
+        </div>
+    {% endif %}
 
 {% endblock %}
