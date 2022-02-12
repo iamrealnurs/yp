@@ -25,8 +25,13 @@ class Seller(models.Model):
     )
 
     @property
-    def ads_amount(self):
-        return self.ads.count()
+    def num_ads(self):
+        actual_ads = list(self.ads.filter(archived=False))
+        archived_ads = list(self.ads.filter(archived=True))
+        ads_dict = {}
+        ads_dict["actual"] = actual_ads
+        ads_dict["archived"] = archived_ads
+        return ads_dict
 
     class Meta:
         verbose_name = "Продавец"
@@ -120,7 +125,7 @@ class Ad(BaseModel):
 
 class ArchiveAdManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(archived=True)
+        return Ad.objects.filter(archived=True)
 
 
 class ArchiveAd(Ad):

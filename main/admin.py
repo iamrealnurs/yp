@@ -3,8 +3,15 @@ from .models import Seller, Category, Tag, Ad
 
 
 class SellerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'ads_amount',)
+    list_display = ('user', 'actual_ads', 'archived_ads',)
 
+    def actual_ads(self, obj):
+        return f'{len(obj.num_ads["actual"])}'
+    actual_ads.short_description = 'Actual Ads'
+
+    def archived_ads(self, obj):
+        return f'{len(obj.num_ads["archived"])}'
+    archived_ads.short_description = 'Archived Ads'
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'ads_amount',)
@@ -15,7 +22,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 class AdAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'category', 'seller', 'created_at', 'updated_at',)
+    list_display = ('name', 'description', 'category', 'seller', 'created_at', 'updated_at', 'archived')
 
 
 admin.site.register(Seller, SellerAdmin)

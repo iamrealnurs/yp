@@ -1,35 +1,94 @@
 from django.contrib.auth.models import User
 from main.models import Seller, Ad, ArchiveAd, Tag, Category
+from pprint import pprint
 import random
 import string
 
-# print(random.choices(string.ascii_lowercase))
+def user_gen():
+    User.objects.create_user(username='nurs', email='nurs@example.com', password='string')
+    User.objects.create_user(username='turlan', email='turlan@example.com', password='string')
+    User.objects.create_user(username='ilya', email='ilya@example.com', password='string')
 
-list_of_tags = ['скидка', 'доставка', 'бесплатно', 'эко', 'первый', 'халяль', 'кошерно']
-list_of_categories = ['Авто', 'Еда', 'Игрушки', 'Собутыльники']
-if Seller.objects.count() == 0:
-    seller_user = Seller.objects.create(user = User.objects.first())
+def user_purge():
+    for user in User.objects.filter(is_superuser=False):
+        user.delete()
 
-Tag.objects.all().delete()
-Category.objects.all().delete()
+def seller_gen():
+    for user in User.objects.filter(is_superuser=False):
+        Seller.objects.create(user=user)
 
-for i in list_of_tags:
-    Tag.objects.create(name=i)
+def tag_gen():
+    list_of_tags = ['скидка', 'доставка', 'бесплатно', 'эко', 'первый', 'халяль', 'кошерно']
+    for i in list_of_tags:
+        Tag.objects.create(name=i)
 
-for i in list_of_categories:
-    Category.objects.create(name=i)
+def category_gen():
+    list_of_categories = ['Авто', 'Еда', 'Игрушки', 'Собутыльники']
+    for i in list_of_categories:
+        Category.objects.create(name=i)
 
-for i in Category.objects.all():
-    print(i.__dict__)
+def ad_gen():
+    for x in Seller.objects.all():
+        for y in Category.objects.all():
+            for z in range(1,5):
+                desc = ''.join(random.choices(string.ascii_lowercase, k=35))
+                tags = random.sample(list(Tag.objects.all()), 4)
+
+                ad = Ad.objects.create(
+                    name=desc[:4],
+                    description=desc,
+                    category=y,
+                    seller=x,
+                    price=random.randint(10, 100),
+                )
+                for i in tags:
+                    ad.tags.add(i)
+
+                ad.save()
+
+def purge(modelname):
+    modelname.objects.all().delete()
+
+def print_objects(modelname):
+    print("---------------------")
+    print(modelname)
+    print("---------------------")
+    for i in modelname.objects.all():
+        print("******************")
+        pprint(i.__dict__)
+
+def archive_ad():
+    ads = list(Ad.objects.all())
+    for i in random.sample(ads, 10):
+        i.archived = True
+        i.save()
+
+def print_sellers():
+    for i in Seller.objects.all():
+        pprint(i.user.username)
+        pprint(i.num_ads)
+        print('-----------------------')
+
+def print_categories():
+    for i in Category.objects.all():
+        print('*************************')
+        print(i.name)
+        for j in Ad.objects.all():
+            print(j.name)
+            print('---------------------')
 
 
-for i in range(1, 20):
-    desc = ''.join(random.choices(string.ascii_lowercase, k=35))
+purge(Seller)
+purge(Ad)
+purge(Tag)
+purge(Category)
+user_purge()
 
-    Ad.objects.create(
-        name=desc[:4],
-        description=desc,
-        category=Category.objects.first(),
-        seller=Seller.objects.first(),
-        price=random.randint(1000, 10000)/100,
-    )
+user_gen()
+seller_gen()
+tag_gen()
+category_gen()
+ad_gen()
+archive_ad()
+
+print_categories()
