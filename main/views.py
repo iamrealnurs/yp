@@ -20,14 +20,6 @@ class AdsListView(ListView):
     model = Ad
     template_name = 'main/ads/list.html'
 
-    # def get_queryset(self):
-    #     # tag = self.kwargs.get("category")
-    #     if category:
-    #         queryset = Product.objects.filter(category__iexact=category)
-    #     else:
-    #         queryset = Product.objects.all()
-    #     return queryset
-
     def get_queryset(self):
         q = self.request.GET.get('tag', '')
         if q:

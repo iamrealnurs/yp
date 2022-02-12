@@ -46,7 +46,7 @@
     <div class="col-2">
         <h4>Tags</h4>
         {% for tag in all_tags_list %}
-           <span class="badge bg-success">{{ tag.name }}</span>
+            <a href="/ads/?tag={{ tag.name }}"><span class="badge bg-success">{{ tag.name }}</span></a>
         {% endfor %}
     </div>
   </div>
