@@ -12,6 +12,4 @@ class IndexView(TemplateView):
         context['greetings'] = 'Hello New World!!!'
         context['turn_on_block'] = config.MAINTENANCE_MODE
         context['username'] = self.request.user.username
-        print('--------------------')
-        pprint(context)
         return context
