@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% block title %} This page Title{% endblock %}
+{% block content %}
+
+<h1>Ads</h1>
+<div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Category</th>
+          <th scope="col">Seller</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ad in object_list %}
+            <tr>
+              <th scope="row">{{ ad.id }}</th>
+              <td>{{ ad.name }}</td>
+              <td>{{ ad.category.name }}</td>
+              <td>{{ ad.seller.user.username }}</td>
+              <td>{{ ad.price }}</td>
+            </tr>
+        {% empty %}
+            <li>No ads yet.</li>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+
