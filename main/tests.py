@@ -79,6 +79,9 @@ def print_categories():
             print(j.name)
             print('---------------------')
 
+def print_ad():
+    for ad in Ad.objects.all():
+        print(ad.tags.all())
 
 purge(Seller)
 purge(Ad)
@@ -93,4 +96,4 @@ category_gen()
 ad_gen()
 archive_ad()
 
-print_categories()
+print_ad()
