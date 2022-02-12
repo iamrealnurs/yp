@@ -21,9 +21,9 @@ class AdsListView(ListView):
     template_name = 'main/ads/list.html'
 
     def get_queryset(self):
-        q = self.request.GET.get('tag', '')
-        if q:
-            query_tag = Tag.objects.filter(name=q).first()
+        tag = self.request.GET.get('tag', '')
+        if tag:
+            query_tag = Tag.objects.get(name=tag)
             queryset = Ad.objects.filter(tags__in=[query_tag])
         else:
             queryset = Ad.objects.all()
