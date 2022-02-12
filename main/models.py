@@ -25,6 +25,7 @@ class Seller(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
+    itn = models.CharField(max_length=255, blank=True, null=True)
 
     @property
     def num_ads(self):

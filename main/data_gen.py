@@ -14,7 +14,7 @@ def user_purge():
         user.delete()
 
 def seller_gen():
-    for user in User.objects.filter(is_superuser=False):
+    for user in User.objects.all():
         Seller.objects.create(user=user)
 
 def tag_gen():
