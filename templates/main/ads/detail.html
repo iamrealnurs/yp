@@ -1,8 +1,10 @@
 {% extends 'main/base.html' %}
-{% block title %}dsaasd{% endblock %}
+{% block title %}{{ object.name }}{% endblock %}
 {% block content %}
 
 <h1><a href="{% url 'ads-list' %}">Ads</a></h1>
+
+    <h2>{{ object.name }}</h2>
 
 <ul class="list-group">
   <li class="list-group-item list-group-item-primary">
