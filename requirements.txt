@@ -1,3 +1,8 @@
 asgiref==3.5.0
 Django==4.0.1
+django-constance==2.8.0
+django-extensions==3.1.5
+django-picklefield==3.0.1
+python-slugify==5.0.2
 sqlparse==0.4.2
+text-unidecode==1.3

@@ -5,6 +5,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -13,8 +14,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'constance',
     'main',
 ]
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_CONFIG = {
+    'MAINTENANCE_MODE': (False, 'Поставить False при технических работах и True при обычном состоянии'),
+}
+
+CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

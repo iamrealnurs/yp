@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Seller, Category, Tag, Ad
+import django.apps
 
 
 class SellerAdmin(admin.ModelAdmin):
@@ -12,6 +13,7 @@ class SellerAdmin(admin.ModelAdmin):
     def archived_ads(self, obj):
         return f'{len(obj.num_ads["archived"])}'
     archived_ads.short_description = 'Archived Ads'
+
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'ads_amount',)
@@ -29,3 +31,10 @@ admin.site.register(Seller, SellerAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ad, AdAdmin)
+#
+#
+# for model in django.apps.apps.get_models():
+#     try:
+#         admin.site.register(model)
+#     except admin.sites.AlreadyRegistered:
+#         pass
