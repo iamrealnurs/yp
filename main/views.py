@@ -1,6 +1,5 @@
-from django.views.generic import TemplateView, ListView, DetailView, UpdateView
+from django.views.generic import TemplateView, ListView, DetailView, UpdateView,  CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView
 from .models import Seller, Category, Tag, Ad
 from .forms import UpdateUserForm, UpdateSellerForm, CreateAdForm
 from django.shortcuts import render, redirect, get_object_or_404
@@ -49,6 +48,17 @@ class AdsDetailView(DetailView):
     template_name = 'main/ads/detail.html'
 
 
+class AdsUpdateView(UpdateView):
+    model = Ad
+    form_class = CreateAdForm
+    template_name = 'main/ads/update.html'
+
+
+class AdsCreateView(CreateView):
+    model = Ad
+    form_class = CreateAdForm
+    template_name = 'main/ads/create.html'
+
 class SellerUpdateView(LoginRequiredMixin, UpdateView):
     model = Seller
     form_class = UpdateSellerForm
@@ -73,9 +83,3 @@ class SellerUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self, *args, **kwargs):
         return reverse("seller-update")
-
-
-class AdsUpdateView(UpdateView):
-    model = Ad
-    form_class = CreateAdForm
-    template_name = 'main/ads/update.html'
