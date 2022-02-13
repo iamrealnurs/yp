@@ -1,7 +1,7 @@
 from django import forms
 
 from django.contrib.auth.models import User
-from .models import Seller
+from .models import Seller, Ad
 
 
 class UpdateUserForm(forms.ModelForm):
@@ -22,3 +22,9 @@ class UpdateSellerForm(forms.ModelForm):
     class Meta:
         model = Seller
         fields = ['itn']
+
+class CreateAdForm(forms.ModelForm):
+
+    class Meta:
+        model = Ad
+        fields = '__all__'
