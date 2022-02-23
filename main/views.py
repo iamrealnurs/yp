@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView, ListView, DetailView, UpdateView,  CreateView
+from django.views.generic.edit import UpdateView as UpdateViewForSeller
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Seller, Category, Tag, Ad
 from .forms import UpdateUserForm, UpdateSellerForm, CreateAdForm
@@ -59,9 +60,10 @@ class AdsCreateView(CreateView):
     form_class = CreateAdForm
     template_name = 'main/ads/create.html'
 
-class SellerUpdateView(LoginRequiredMixin, UpdateView):
+class SellerUpdateView(LoginRequiredMixin, UpdateViewForSeller):
     model = Seller
     form_class = UpdateSellerForm
+    form_user = UpdateUserForm
     template_name = "main/seller/update.html"
 
     def get_login_url(self):
@@ -78,8 +80,20 @@ class SellerUpdateView(LoginRequiredMixin, UpdateView):
             seller = get_object_or_404(Seller, user=current_user)
             if not seller:
                 return redirect('index')
-
         return seller
 
     def get_success_url(self, *args, **kwargs):
         return reverse("seller-update")
+
+    def get_context_data(self, **kwargs):
+        context = super(SellerUpdateView, self).get_context_data(**kwargs)
+        context['form_user'] = self.form_user(self.request.POST, instance=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        form_user = self.form_user(self.request.POST, instance=self.request.user)
+        if form.is_valid() and form_user.is_valid():
+            print('valid')
+            form_user.save()
+
+        return super().form_valid(form)

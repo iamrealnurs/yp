@@ -17,8 +17,9 @@ class UpdateUserForm(forms.ModelForm):
 
 
 class UpdateSellerForm(forms.ModelForm):
-    itn = forms.CharField()
-
+    itn = forms.CharField(max_length=100,
+                               required=True,
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
     class Meta:
         model = Seller
         fields = ['itn']
