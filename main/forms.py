@@ -16,38 +16,6 @@ class UpdateUserForm(forms.ModelForm):
         model = User
         fields = ['username', 'email']
 
-def check_itn(itn):
-        if len(itn) not in (10, 12):
-            return False
-
-        def itn_csum(itn):
-            k = (3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8)
-            pairs = zip(k[11 - len(itn):], [int(x) for x in itn])
-            return str(sum([k * v for k, v in pairs]) % 11 % 10)
-
-        if len(itn) == 10:
-            return itn[-1] == itn_csum(itn[:-1])
-        else:
-            return itn[-2:] == itn_csum(itn[:-2]) + itn_csum(itn[:-1])
-
-class UpdateSellerForm(forms.ModelForm):
-    itn = forms.CharField(max_length=100,
-                               required=True,
-                               widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-    def clean_itn(self):
-        data = self.cleaned_data.get('itn')
-
-        if not check_itn(data):
-            raise forms.ValidationError('ITN is Incorrect')
-
-        return data
-
-
-    class Meta:
-        model = Seller
-        fields = ['itn']
-
 
 class AdForm(forms.ModelForm):
     class Meta:
@@ -66,4 +34,37 @@ AdPictureInlineFormset = inlineformset_factory(
     Picture,
     form=AdPictureForm,
 )
+
+
+def check_itn(itn):
+    if len(itn) not in (10, 12):
+        return False
+
+    def itn_csum(itn):
+        k = (3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8)
+        pairs = zip(k[11 - len(itn):], [int(x) for x in itn])
+        return str(sum([k * v for k, v in pairs]) % 11 % 10)
+
+    if len(itn) == 10:
+        return itn[-1] == itn_csum(itn[:-1])
+    else:
+        return itn[-2:] == itn_csum(itn[:-2]) + itn_csum(itn[:-1])
+
+
+class UpdateSellerForm(forms.ModelForm):
+    itn = forms.CharField(max_length=100,
+                          required=True,
+                          widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    def clean_itn(self):
+        data = self.cleaned_data.get('itn')
+
+        if not check_itn(data):
+            raise forms.ValidationError('ITN is Incorrect')
+
+        return data
+
+    class Meta:
+        model = Seller
+        fields = ['itn']
 
