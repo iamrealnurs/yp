@@ -87,13 +87,28 @@ class SellerUpdateView(LoginRequiredMixin, UpdateViewForSeller):
 
     def get_context_data(self, **kwargs):
         context = super(SellerUpdateView, self).get_context_data(**kwargs)
-        context['form_user'] = self.form_user(self.request.POST, instance=self.request.user)
+        print('--------------------------------------------------------------------------------------------------')
+        print('get context data')
+        pprint(self.__dict__)
+        print('--------------------------------------------------------------------------------------------------')
+        pprint(self.request.user)
+        print('--------------------------------------------------------------------------------------------------')
+        pprint(self.object)
+        print('--------------------------------------------------------------------------------------------------')
+        context['form_user'] = self.form_user(self.request.POST, instance=self.object.user)
         return context
 
     def form_valid(self, form):
-        form_user = self.form_user(self.request.POST, instance=self.request.user)
+        form_user = self.form_user(self.request.POST, instance=self.object.user)
+        # print('************************')
+        # pprint(form.__dict__)
+        # print('************************')
+        # pprint(form_user.__dict__)
+        # print('----------------------------------------')
         if form.is_valid() and form_user.is_valid():
             print('valid')
             form_user.save()
+        else:
+            return reverse("seller-update")
 
         return super().form_valid(form)

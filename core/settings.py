@@ -19,11 +19,12 @@ INSTALLED_APPS = [
 ]
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_DATABASE_PREFIX = 'constance:iamrealnurs:'
 CONSTANCE_CONFIG = {
     'MAINTENANCE_MODE': (False, 'Поставить False при обычном состоянии и True при технических работах'),
 }
 
-CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = False
+CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

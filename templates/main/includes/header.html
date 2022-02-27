@@ -14,6 +14,11 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'admin:index' %}" target="_blank">Admin</a>
           </li>
+            {% if username %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'seller-update' %}" target="_blank">Seller Update</a>
+          </li>
+            {% endif %}
           <li class="nav-item">
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
           </li>

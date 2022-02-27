@@ -140,4 +140,3 @@ class ArchiveAd(Ad):
     class Meta:
         proxy = True
 
-
