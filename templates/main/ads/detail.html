@@ -32,6 +32,11 @@
   </li>
 </ul>
 
+    {% for image in object.pictures.all %}
+        <img src="{{ image.picture.url}}" alt="">
+    {% endfor %}
+
+
 {% endblock %}
 
 

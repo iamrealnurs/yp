@@ -1,12 +1,14 @@
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView, ListView, DetailView, UpdateView,  CreateView
 from django.views.generic.edit import UpdateView as UpdateViewForSeller
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Seller, Category, Tag, Ad
-from .forms import UpdateUserForm, UpdateSellerForm, AdForm
+from .forms import UpdateUserForm, UpdateSellerForm, AdForm, AdPictureInlineFormset
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from pprint import pprint
 from constance import config
+from django.forms import modelformset_factory
 
 
 class HeaderView(TemplateView):
@@ -61,13 +63,44 @@ class AdsDetailView(DetailView):
 class UpdateAdsView(UpdateView):
     model = Ad
     form_class = AdForm
-    template_name = 'main/ads/update.html'
+    template_name = 'main/ads/edit.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateAdsView, self).get_context_data(**kwargs)
+        context['ads_picture_formset'] = AdPictureInlineFormset()
+        context['title'] = 'Update AD'
+        return context
+
+    def post(self, request, *args, **kwargs):
+        ads_picture_formset = AdPictureInlineFormset(self.request.POST, self.request.FILES, instance=self.get_object())
+        if ads_picture_formset.is_valid():
+            ads_picture_formset.save()
+            return HttpResponseRedirect(self.get_success_url())
+        return super().post(request, *args, **kwargs)
 
 
 class CreateAdsView(CreateView):
-    model = Ad
     form_class = AdForm
-    template_name = 'main/ads/create.html'
+    template_name = 'main/ads/edit.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateAdsView, self).get_context_data(**kwargs)
+        context['ads_picture_formset'] = AdPictureInlineFormset()
+        context['title'] = 'Create AD'
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        # form_class = self.form_class
+        form = self.get_form()
+        if form.is_valid():
+            self.object = form.save()
+            ads_picture_formset = AdPictureInlineFormset(self.request.POST, self.request.FILES, instance=self.object)
+            if ads_picture_formset.is_valid():
+                ads_picture_formset.save()
+                return HttpResponseRedirect(self.get_success_url())
+        else:
+            return self.form_invalid(form)
 
 
 class SellerUpdateView(LoginRequiredMixin, UpdateViewForSeller):

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Seller, Category, Tag, Ad
+from .models import Seller, Category, Tag, Ad, Picture
 import django.apps
 
 
@@ -31,6 +31,7 @@ admin.site.register(Seller, SellerAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ad, AdAdmin)
+admin.site.register(Picture)
 #
 #
 # for model in django.apps.apps.get_models():
