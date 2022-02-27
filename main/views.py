@@ -2,7 +2,7 @@ from django.views.generic import TemplateView, ListView, DetailView, UpdateView,
 from django.views.generic.edit import UpdateView as UpdateViewForSeller
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Seller, Category, Tag, Ad
-from .forms import UpdateUserForm, UpdateSellerForm, CreateAdForm
+from .forms import UpdateUserForm, UpdateSellerForm, AdForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from pprint import pprint
@@ -49,16 +49,28 @@ class AdsDetailView(DetailView):
     template_name = 'main/ads/detail.html'
 
 
-class AdsUpdateView(UpdateView):
+# class AdsUpdateView(UpdateView):
+#     model = Ad
+#     form_class = CreateAdForm
+#     template_name = 'main/ads/update.html'
+#
+#
+# class AdsCreateView(CreateView):
+#     model = Ad
+#     form_class = CreateAdForm
+#     template_name = 'main/ads/create.html'
+
+class UpdateAdsView(UpdateView):
     model = Ad
-    form_class = CreateAdForm
+    form_class = AdForm
     template_name = 'main/ads/update.html'
 
 
-class AdsCreateView(CreateView):
+class CreateAdsView(CreateView):
     model = Ad
-    form_class = CreateAdForm
+    form_class = AdForm
     template_name = 'main/ads/create.html'
+
 
 class SellerUpdateView(LoginRequiredMixin, UpdateViewForSeller):
     model = Seller
@@ -87,26 +99,12 @@ class SellerUpdateView(LoginRequiredMixin, UpdateViewForSeller):
 
     def get_context_data(self, **kwargs):
         context = super(SellerUpdateView, self).get_context_data(**kwargs)
-        print('--------------------------------------------------------------------------------------------------')
-        print('get context data')
-        pprint(self.__dict__)
-        print('--------------------------------------------------------------------------------------------------')
-        pprint(self.request.user)
-        print('--------------------------------------------------------------------------------------------------')
-        pprint(self.object)
-        print('--------------------------------------------------------------------------------------------------')
         context['form_user'] = self.form_user(self.request.POST, instance=self.object.user)
         return context
 
     def form_valid(self, form):
         form_user = self.form_user(self.request.POST, instance=self.object.user)
-        # print('************************')
-        # pprint(form.__dict__)
-        # print('************************')
-        # pprint(form_user.__dict__)
-        # print('----------------------------------------')
         if form.is_valid() and form_user.is_valid():
-            print('valid')
             form_user.save()
         else:
             return reverse("seller-update")

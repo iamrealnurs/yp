@@ -25,7 +25,7 @@ class UpdateSellerForm(forms.ModelForm):
         fields = ['itn']
 
 
-class CreateAdForm(forms.ModelForm):
+class AdForm(forms.ModelForm):
     class Meta:
         model = Ad
         fields = '__all__'
