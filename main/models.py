@@ -6,11 +6,7 @@ from slugify import slugify
 
 
 class BaseModel(models.Model):
-    name = models.CharField(
-        max_length=255,
-        unique=True,
-        blank=False
-    )
+    name = models.CharField( max_length=255, unique=True, blank=False)
 
     class Meta:
         abstract = True
@@ -20,12 +16,9 @@ class BaseModel(models.Model):
 
 
 class Seller(models.Model):
-    user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,)
     itn = models.CharField(max_length=255, blank=True, null=True)
+    avatar = models.ImageField(upload_to='uploads/', default='uploads/default.jpeg', blank=True, null=True,)
 
     @property
     def num_ads(self):
@@ -42,19 +35,8 @@ class Seller(models.Model):
 
 
 class Category(BaseModel):
-    name = models.CharField(
-        max_length=255,
-        unique=True,
-        blank=False
-    )
-
-    slug = models.SlugField(
-        max_length=255,
-        unique=True,
-        blank=True,
-        null=True,
-        allow_unicode=True
-    )
+    name = models.CharField(max_length=255, unique=True, blank=False)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True, allow_unicode=True)
 
     @property
     def ads_amount(self):
@@ -72,11 +54,7 @@ class Category(BaseModel):
 
 
 class Tag(BaseModel):
-    name = models.CharField(
-        max_length=255,
-        unique=True,
-        blank=False
-    )
+    name = models.CharField(max_length=255, unique=True, blank=False)
 
     def __str__(self):
         return self.name
@@ -87,39 +65,15 @@ class Tag(BaseModel):
 
 
 class Ad(BaseModel):
-    name = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False
-    )
+    name = models.CharField(max_length=255, blank=False, null=False)
     description = models.TextField(null=True)
-    category = models.ForeignKey(
-        'Category',
-        on_delete=models.CASCADE,
-        related_name='ads'
-    )
-    seller = models.ForeignKey(
-        'Seller',
-        on_delete=models.CASCADE,
-        related_name='ads'
-    )
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='ads')
+    seller = models.ForeignKey('Seller', on_delete=models.CASCADE, related_name='ads')
     tags = models.ManyToManyField('Tag', blank=True)
-    price = models.PositiveIntegerField(
-        default=0,
-        blank=True,
-        null=True
-    )
+    price = models.PositiveIntegerField(default=0, blank=True, null=True)
     archived = models.BooleanField(default=False)
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        blank=True,
-        null=True
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        blank=True,
-        null=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     class Meta:
         verbose_name = "Объявление"
@@ -139,4 +93,9 @@ class ArchiveAd(Ad):
 
     class Meta:
         proxy = True
+
+
+class Picture(models.Model):
+    picture = models.ImageField(upload_to='uploads/ad/pictures', blank=True, null=True,)
+    ad = models.ForeignKey('Ad', on_delete=models.SET_NULL, blank=True, null=True, related_name='pictures')
 

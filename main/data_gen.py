@@ -91,4 +91,5 @@ category_gen()
 ad_gen()
 archive_ad()
 
-print_categories()
+for i in Seller.objects.all():
+    pprint(i.avatar.url)

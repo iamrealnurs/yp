@@ -9,14 +9,23 @@ from pprint import pprint
 from constance import config
 
 
-class IndexView(TemplateView):
+class HeaderView(TemplateView):
+    template_name = 'main/includes/header.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HeaderView, self).get_context_data(**kwargs)
+        current_user_seller = Seller.objects.get(user = self.request.user)
+        context['seller'] = current_user_seller
+        return context
+
+
+class IndexView(HeaderView):
     template_name = 'main/index.html'
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['greetings'] = 'Hello New World!!!'
         context['turn_on_block'] = config.MAINTENANCE_MODE
-        context['username'] = self.request.user.username
         return context
 
 
@@ -48,17 +57,6 @@ class AdsDetailView(DetailView):
     model = Ad
     template_name = 'main/ads/detail.html'
 
-
-# class AdsUpdateView(UpdateView):
-#     model = Ad
-#     form_class = CreateAdForm
-#     template_name = 'main/ads/update.html'
-#
-#
-# class AdsCreateView(CreateView):
-#     model = Ad
-#     form_class = CreateAdForm
-#     template_name = 'main/ads/create.html'
 
 class UpdateAdsView(UpdateView):
     model = Ad

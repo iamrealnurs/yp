@@ -1,8 +1,11 @@
 asgiref==3.5.0
 Django==4.0.1
 django-constance==2.8.0
+django-crispy-forms==1.14.0
 django-extensions==3.1.5
 django-picklefield==3.0.1
+Pillow==9.0.1
 python-slugify==5.0.2
+sorl-thumbnail==12.8.0
 sqlparse==0.4.2
 text-unidecode==1.3

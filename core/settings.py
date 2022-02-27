@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*twz6jbt9x7ic6u0^_x4xr+ubh^&e9c8*pyl_))(@wd5ele%6v'
@@ -16,6 +17,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'constance',
     'main',
+    'sorl.thumbnail',
 ]
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
@@ -106,6 +108,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
