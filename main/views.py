@@ -16,8 +16,6 @@ class HeaderView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HeaderView, self).get_context_data(**kwargs)
-        current_user_seller = Seller.objects.get(user = self.request.user)
-        context['seller'] = current_user_seller
         return context
 
 
